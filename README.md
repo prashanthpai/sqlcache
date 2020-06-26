@@ -1,7 +1,8 @@
 # sqlcache
 
-[![Go.Dev reference](https://img.shields.io/badge/go.dev-reference-blue?logo=go&logoColor=white)](https://pkg.go.dev/prashanthpai/sqlcache?tab=doc)
+[![Go.Dev reference](https://img.shields.io/badge/go.dev-reference-blue?logo=go)](https://pkg.go.dev/prashanthpai/sqlcache?tab=doc)
 [![Go Report Card](https://goreportcard.com/badge/github.com/prashanthpai/sqlcache)](https://goreportcard.com/report/github.com/prashanthpai/sqlcache)
+[![Test status](https://github.com/prashanthpai/sqlcache/workflows/test/badge.svg?branch=master "test status")](https://github.com/prashanthpai/sqlcache/actions)
 [![MIT license](https://img.shields.io/badge/license-MIT-brightgreen.svg)](https://opensource.org/licenses/MIT)
 
 sqlcache is an **experimental** caching middleware for `database/sql`. It
