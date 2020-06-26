@@ -18,3 +18,6 @@ tags
 
 # Binary
 example/example
+
+# mac
+.DS_Store
