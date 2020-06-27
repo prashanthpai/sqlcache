@@ -21,3 +21,6 @@ example/example
 
 # mac
 .DS_Store
+
+# test coverage output
+coverage.out
