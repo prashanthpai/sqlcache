@@ -14,5 +14,27 @@ jobs:
         go-version: ${{ matrix.go-version }}
     - name: Checkout code
       uses: actions/checkout@v2
-    - name: Test
-      run: go test -v -cover ./...
+    - name: Run unit tests
+      run: go test -v -race -cover
+
+  coverage:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Install Go
+      uses: actions/setup-go@v2
+      with:
+        go-version: 1.14.x
+    - name: Checkout code
+      uses: actions/checkout@v2
+    - name: Run unit tests with coverage
+      run: go test -v -race -coverprofile=coverage.out
+    - name: Convert coverage to lcov
+      uses: jandelgado/gcov2lcov-action@v1.0.2
+      with:
+          infile: coverage.out
+          outfile: coverage.lcov
+    - name: Coveralls
+      uses: coverallsapp/github-action@v1.1.1
+      with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path-to-lcov: coverage.lcov
