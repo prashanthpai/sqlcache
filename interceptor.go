@@ -4,11 +4,9 @@ import (
 	"context"
 	"database/sql/driver"
 	"fmt"
-	"strconv"
 	"sync/atomic"
 	"time"
 
-	"github.com/mitchellh/hashstructure"
 	"github.com/ngrok/sqlmw"
 	"github.com/prashanthpai/sqlcache/cache"
 )
@@ -26,6 +24,7 @@ type Config struct {
 	OnError func(error)
 	// HashFunc can be optionally set to provide a custom hashing function. By
 	// default sqlcache uses mitchellh/hashstructure which internally uses FNV.
+	// If hash collision is a concern to you, consider using NoopHash.
 	HashFunc func(query string, args []driver.NamedValue) (string, error)
 }
 
@@ -183,22 +182,6 @@ func (i *Interceptor) checkCache(hash string) driver.Rows {
 		item,
 		0,
 	}
-}
-
-func defaultHashFunc(query string, args []driver.NamedValue) (string, error) {
-	u64, err := hashstructure.Hash(struct {
-		Query string
-		Args  []driver.NamedValue
-	}{
-		Query: query,
-		Args:  args,
-	}, nil)
-	if err != nil {
-		return "", err
-	}
-
-	key := fmt.Sprintf("q%da%dh%s", len(query), len(args), strconv.FormatUint(u64, 10))
-	return key, nil
 }
 
 // Stats contains sqlcache statistics.
