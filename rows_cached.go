@@ -22,7 +22,9 @@ func (r *rowsCached) Next(dest []driver.Value) error {
 		return io.EOF
 	}
 
-	copy(dest, r.Item.Rows[r.ptr]) // copy required ?
+	for i := range dest {
+		dest[i] = r.Item.Rows[r.ptr][i]
+	}
 	r.ptr++
 
 	return nil

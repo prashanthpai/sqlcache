@@ -91,7 +91,7 @@ func run() error {
 		return fmt.Errorf("db.PingContext() failed: %w", err)
 	}
 
-	for i := 0; i < 3; i++ {
+	for i := 0; i < 15; i++ {
 		start := time.Now()
 		if err := doQuery(db); err != nil {
 			return fmt.Errorf("doQuery() failed: %w", err)

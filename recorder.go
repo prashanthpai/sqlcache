@@ -66,7 +66,7 @@ func (r *rowsRecorder) Next(dest []driver.Value) error {
 	}
 
 	cpy := make([]driver.Value, len(dest))
-	copy(cpy, dest) // TODO: deep copy required ?
+	copy(cpy, dest)
 	r.item.Rows = append(r.item.Rows, cpy)
 
 	return err

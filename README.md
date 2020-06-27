@@ -6,14 +6,17 @@
 [![codecov](https://codecov.io/gh/prashanthpai/sqlcache/branch/master/graph/badge.svg)](https://codecov.io/gh/prashanthpai/sqlcache)
 [![MIT license](https://img.shields.io/badge/license-MIT-brightgreen.svg)](https://opensource.org/licenses/MIT)
 
-sqlcache is an **experimental** caching middleware for `database/sql`. It
-leverages APIs provided by the handy [sqlmw](https://github.com/ngrok/sqlmw)
+sqlcache is an **experimental** caching middleware for `database/sql`
+that enables existing Go programs to add caching in a declarative way.
+It leverages APIs provided by the handy [sqlmw](https://github.com/ngrok/sqlmw)
 project and is inspired from [slonik-interceptor-query-cache](https://github.com/gajus/slonik-interceptor-query-cache).
-This liberates your Go program from maintaining imperative code that
-implements the cache-aside pattern. Your program will perceive the
-database client/driver as a read-through cache.
 
-Tested with PostgreSQL database with [pgx](https://github.com/jackc/pgx/tree/master/stdlib) as the driver.
+This liberates your Go program from maintaining imperative code that
+repeatedly implements the cache-aside pattern. Your program will perceive
+the database client/driver as a read-through cache.
+
+Tested with PostgreSQL database with [pgx](https://github.com/jackc/pgx/tree/master/stdlib)
+as the underlying driver.
 
 Cache backends supported:
 
@@ -76,11 +79,6 @@ rows, err := db.QueryContext(context.TODO(), `
 ```
 
 See [example/main.go](example/main.go) for a full working example.
-
-## TODO
-
-* Test against different postgres data types.
-* Check if deep copy of buffers can be removed.
 
 ### References
 
