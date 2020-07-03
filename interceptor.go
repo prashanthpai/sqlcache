@@ -64,6 +64,13 @@ func NewInterceptor(config *Config) (*Interceptor, error) {
 	}, nil
 }
 
+// Driver returns the supplied driver.Driver with a new object that has
+// all of its calls intercepted by the sqlcache.Interceptor. Any DB call
+// without a context passed will not be intercepted.
+func (i *Interceptor) Driver(d driver.Driver) driver.Driver {
+	return sqlmw.Driver(d, i)
+}
+
 // Enable enables the interceptor. Interceptor instance is enabled by default
 // on creation.
 func (i *Interceptor) Enable() {

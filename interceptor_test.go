@@ -13,7 +13,6 @@ import (
 	"github.com/prashanthpai/sqlcache/mocks"
 
 	sqlmock "github.com/DATA-DOG/go-sqlmock"
-	"github.com/ngrok/sqlmw"
 	"github.com/stretchr/testify/mock"
 	"github.com/stretchr/testify/require"
 )
@@ -131,7 +130,7 @@ func TestAttrs(t *testing.T) {
 	})
 
 	driverName := fmt.Sprintf("mockdriver:%s", t.Name())
-	sql.Register(driverName, sqlmw.Driver(mockDB.Driver(), ic))
+	sql.Register(driverName, ic.Driver(mockDB.Driver()))
 
 	db, err := sql.Open(driverName, dsn)
 	assert.Nil(err)
@@ -159,7 +158,7 @@ func TestCacheMiss(t *testing.T) {
 	})
 
 	driverName := fmt.Sprintf("mockdriver:%s", t.Name())
-	sql.Register(driverName, sqlmw.Driver(mockDB.Driver(), ic))
+	sql.Register(driverName, ic.Driver(mockDB.Driver()))
 
 	db, err := sql.Open(driverName, dsn)
 	assert.Nil(err)
@@ -219,7 +218,7 @@ func TestCacheHit(t *testing.T) {
 	})
 
 	driverName := fmt.Sprintf("mockdriver:%s", t.Name())
-	sql.Register(driverName, sqlmw.Driver(mockDB.Driver(), ic))
+	sql.Register(driverName, ic.Driver(mockDB.Driver()))
 
 	db, err := sql.Open(driverName, dsn)
 	assert.Nil(err)
@@ -263,7 +262,7 @@ func TestDisabled(t *testing.T) {
 	})
 
 	driverName := fmt.Sprintf("mockdriver:%s", t.Name())
-	sql.Register(driverName, sqlmw.Driver(mockDB.Driver(), ic))
+	sql.Register(driverName, ic.Driver(mockDB.Driver()))
 
 	db, err := sql.Open(driverName, dsn)
 	assert.Nil(err)
@@ -314,7 +313,7 @@ func TestMaxRows(t *testing.T) {
 	})
 
 	driverName := fmt.Sprintf("mockdriver:%s", t.Name())
-	sql.Register(driverName, sqlmw.Driver(mockDB.Driver(), ic))
+	sql.Register(driverName, ic.Driver(mockDB.Driver()))
 
 	db, err := sql.Open(driverName, dsn)
 	assert.Nil(err)
@@ -363,7 +362,7 @@ func TestHashFuncErr(t *testing.T) {
 	})
 
 	driverName := fmt.Sprintf("mockdriver:%s", t.Name())
-	sql.Register(driverName, sqlmw.Driver(mockDB.Driver(), ic))
+	sql.Register(driverName, ic.Driver(mockDB.Driver()))
 
 	db, err := sql.Open(driverName, dsn)
 	assert.Nil(err)
@@ -412,7 +411,7 @@ func TestCacheSetErr(t *testing.T) {
 	})
 
 	driverName := fmt.Sprintf("mockdriver:%s", t.Name())
-	sql.Register(driverName, sqlmw.Driver(mockDB.Driver(), ic))
+	sql.Register(driverName, ic.Driver(mockDB.Driver()))
 
 	db, err := sql.Open(driverName, dsn)
 	assert.Nil(err)

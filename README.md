@@ -35,7 +35,7 @@ import (
 	"database/sql"
 
 	redis "github.com/go-redis/redis/v7"
-	"github.com/ngrok/sqlmw"
+	"github.com/jackc/pgx/v4/stdlib"
 	"github.com/prashanthpai/sqlcache"
 )
 
@@ -51,8 +51,8 @@ func main() {
 	})
 	...
 
-	// wrap pgx driver with the interceptor and register it
-	sql.Register("pgx-with-cache", sqlmw.Driver(stdlib.GetDefaultDriver(), interceptor))
+	// wrap pgx driver with cache interceptor and register it
+	sql.Register("pgx-sqlcache", interceptor.Driver(stdlib.GetDefaultDriver()))
 
 	// open the database using the wrapped driver
 	db, err := sql.Open("pgx-with-cache", dsn)

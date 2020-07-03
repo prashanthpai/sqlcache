@@ -13,7 +13,6 @@ import (
 	"github.com/dgraph-io/ristretto"
 	redis "github.com/go-redis/redis/v7"
 	"github.com/jackc/pgx/v4/stdlib"
-	"github.com/ngrok/sqlmw"
 )
 
 const (
@@ -71,7 +70,7 @@ func main() {
 	}()
 
 	// install the wrapper which wraps pgx driver
-	sql.Register("pgx-sqlcache", sqlmw.Driver(stdlib.GetDefaultDriver(), interceptor))
+	sql.Register("pgx-sqlcache", interceptor.Driver(stdlib.GetDefaultDriver()))
 
 	if err := run(); err != nil {
 		log.Fatalf("run() failed: %v", err)
