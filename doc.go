@@ -27,7 +27,7 @@ Usage:
 		...
 
 		// wrap pgx driver with the interceptor and register it
-		sql.Register("pgx-sqlcache", interceptor.Driver(stdlib.GetDefaultDriver()))
+		sql.Register("pgx-with-cache", interceptor.Driver(stdlib.GetDefaultDriver()))
 
 		// open the database using the wrapped driver
 		db, err := sql.Open("pgx-with-cache", dsn)
