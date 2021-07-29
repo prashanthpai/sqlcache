@@ -6,7 +6,7 @@
 [![codecov](https://codecov.io/gh/prashanthpai/sqlcache/branch/master/graph/badge.svg)](https://codecov.io/gh/prashanthpai/sqlcache)
 [![MIT license](https://img.shields.io/badge/license-MIT-brightgreen.svg)](https://opensource.org/licenses/MIT)
 
-sqlcache is an **experimental** caching middleware for `database/sql`
+sqlcache is a caching middleware for `database/sql`
 that enables existing Go programs to add caching in a declarative way.
 It leverages APIs provided by the handy [sqlmw](https://github.com/ngrok/sqlmw)
 project and is inspired from [slonik-interceptor-query-cache](https://github.com/gajus/slonik-interceptor-query-cache).
