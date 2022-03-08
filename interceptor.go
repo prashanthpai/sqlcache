@@ -104,7 +104,7 @@ func (i *Interceptor) StmtQueryContext(ctx context.Context, conn driver.StmtQuer
 		return conn.QueryContext(ctx, args)
 	}
 
-	if cached := i.checkCache(hash); cached != nil {
+	if cached := i.checkCache(ctx, hash); cached != nil {
 		return cached, nil
 	}
 
@@ -114,7 +114,7 @@ func (i *Interceptor) StmtQueryContext(ctx context.Context, conn driver.StmtQuer
 	}
 
 	cacheSetter := func(item *cache.Item) {
-		err := i.c.Set(hash, item, time.Duration(attrs.ttl)*time.Second)
+		err := i.c.Set(ctx, hash, item, time.Duration(attrs.ttl)*time.Second)
 		if err != nil {
 			atomic.AddUint64(&i.stats.Errors, 1)
 			if i.onErr != nil {
@@ -147,7 +147,7 @@ func (i *Interceptor) ConnQueryContext(ctx context.Context, conn driver.QueryerC
 		return conn.QueryContext(ctx, query, args)
 	}
 
-	if cached := i.checkCache(hash); cached != nil {
+	if cached := i.checkCache(ctx, hash); cached != nil {
 		return cached, nil
 	}
 
@@ -157,7 +157,7 @@ func (i *Interceptor) ConnQueryContext(ctx context.Context, conn driver.QueryerC
 	}
 
 	cacheSetter := func(item *cache.Item) {
-		err := i.c.Set(hash, item, time.Duration(attrs.ttl)*time.Second)
+		err := i.c.Set(ctx, hash, item, time.Duration(attrs.ttl)*time.Second)
 		if err != nil {
 			atomic.AddUint64(&i.stats.Errors, 1)
 			if i.onErr != nil {
@@ -169,8 +169,8 @@ func (i *Interceptor) ConnQueryContext(ctx context.Context, conn driver.QueryerC
 	return newRowsRecorder(cacheSetter, rows, attrs.maxRows), err
 }
 
-func (i *Interceptor) checkCache(hash string) driver.Rows {
-	item, ok, err := i.c.Get(hash)
+func (i *Interceptor) checkCache(ctx context.Context, hash string) driver.Rows {
+	item, ok, err := i.c.Get(ctx, hash)
 	if err != nil {
 		atomic.AddUint64(&i.stats.Errors, 1)
 		if i.onErr != nil {

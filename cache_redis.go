@@ -1,11 +1,12 @@
 package sqlcache
 
 import (
+	"context"
 	"time"
 
 	"github.com/prashanthpai/sqlcache/cache"
 
-	redis "github.com/go-redis/redis/v7"
+	redis "github.com/go-redis/redis/v8"
 	msgpack "github.com/vmihailenco/msgpack/v4"
 )
 
@@ -18,8 +19,8 @@ type Redis struct {
 
 // Get gets a cache item from redis. Returns pointer to the item, a boolean
 // which represents whether key exists or not and an error.
-func (r *Redis) Get(key string) (*cache.Item, bool, error) {
-	b, err := r.c.Get(r.keyPrefix + key).Bytes()
+func (r *Redis) Get(ctx context.Context, key string) (*cache.Item, bool, error) {
+	b, err := r.c.Get(ctx, r.keyPrefix+key).Bytes()
 	switch err {
 	case nil:
 		var item cache.Item
@@ -35,13 +36,13 @@ func (r *Redis) Get(key string) (*cache.Item, bool, error) {
 }
 
 // Set sets the given item into redis with provided TTL duration.
-func (r *Redis) Set(key string, item *cache.Item, ttl time.Duration) error {
+func (r *Redis) Set(ctx context.Context, key string, item *cache.Item, ttl time.Duration) error {
 	b, err := msgpack.Marshal(item)
 	if err != nil {
 		return err
 	}
 
-	_, err = r.c.Set(r.keyPrefix+key, b, ttl).Result()
+	_, err = r.c.Set(ctx, r.keyPrefix+key, b, ttl).Result()
 	return err
 }
 

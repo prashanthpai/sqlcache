@@ -9,7 +9,7 @@ Usage:
 	import (
 		"database/sql"
 
-		redis "github.com/go-redis/redis/v7"
+		redis "github.com/go-redis/redis/v8"
 		"github.com/prashanthpai/sqlcache"
 		"github.com/jackc/pgx/v4/stdlib"
 	)

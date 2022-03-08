@@ -11,7 +11,7 @@ import (
 	"github.com/prashanthpai/sqlcache/cache"
 
 	"github.com/dgraph-io/ristretto"
-	redis "github.com/go-redis/redis/v7"
+	redis "github.com/go-redis/redis/v8"
 	"github.com/jackc/pgx/v4/stdlib"
 )
 
