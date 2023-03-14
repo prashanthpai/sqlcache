@@ -37,7 +37,7 @@ func newRedisCache() (cache.Cacher, error) {
 		Addrs: []string{"127.0.0.1:6379"},
 	})
 
-	if _, err := r.Ping().Result(); err != nil {
+	if _, err := r.Ping(context.TODO()).Result(); err != nil {
 		return nil, err
 	}
 
@@ -79,8 +79,10 @@ func main() {
 
 func run() error {
 
+	// db, err := sql.Open("pgx-sqlcache",
+	// 	"host=127.0.0.1 port=5432 user=prashanthpai dbname=postgres sslmode=disable")
 	db, err := sql.Open("pgx-sqlcache",
-		"host=127.0.0.1 port=5432 user=prashanthpai dbname=postgres sslmode=disable")
+		"host=localhost user=postgres dbname=postgres password=postgres")
 	if err != nil {
 		return err
 	}
