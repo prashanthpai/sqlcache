@@ -34,7 +34,7 @@ Create a backend cache instance and install the interceptor:
 import (
 	"database/sql"
 
-	redis "github.com/go-redis/redis/v7"
+	"github.com/go-redis/redis/v8"
 	"github.com/jackc/pgx/v4/stdlib"
 	"github.com/prashanthpai/sqlcache"
 )

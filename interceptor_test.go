@@ -182,8 +182,8 @@ func TestCacheMiss(t *testing.T) {
 		t.Run(tcName, func(t *testing.T) {
 			mCacher := new(mocks.Cacher)
 			for i := 0; i < 2; i++ { // once each for runQuery and runQueryPrepared
-				mCacher.On("Get", mock.Anything).Return(nil, td.present, td.err)
-				mCacher.On("Set", mock.Anything, mock.Anything, time.Duration(30*time.Second)).Return(nil)
+				mCacher.On("Get", mock.Anything, mock.Anything).Return(nil, td.present, td.err)
+				mCacher.On("Set", mock.Anything, mock.Anything, mock.Anything, time.Duration(30*time.Second)).Return(nil)
 			}
 
 			ic.c = mCacher
@@ -238,7 +238,7 @@ func TestCacheHit(t *testing.T) {
 
 	mCacher := new(mocks.Cacher)
 	for i := 0; i < 2; i++ { // once each for runQuery and runQueryPrepared
-		mCacher.On("Get", mock.Anything).Return(cacheItem, true, nil)
+		mCacher.On("Get", mock.Anything, mock.Anything).Return(cacheItem, true, nil)
 	}
 	ic.c = mCacher
 
@@ -283,8 +283,8 @@ func TestDisabled(t *testing.T) {
 			if enabled == true {
 				ic.Enable()
 				for i := 0; i < 2; i++ { // once each for runQuery and runQueryPrepared
-					mCacher.On("Get", mock.Anything).Return(nil, false, nil) // cache miss
-					mCacher.On("Set", mock.Anything, mock.Anything, time.Duration(30*time.Second)).Return(nil)
+					mCacher.On("Get", mock.Anything, mock.Anything).Return(nil, false, nil) // cache miss
+					mCacher.On("Set", mock.Anything, mock.Anything, mock.Anything, time.Duration(30*time.Second)).Return(nil)
 				}
 			} else {
 				ic.Disable()
@@ -327,7 +327,7 @@ func TestMaxRows(t *testing.T) {
 
 	mCacher := new(mocks.Cacher)
 	for i := 0; i < 2; i++ { // once each for runQuery and runQueryPrepared
-		mCacher.On("Get", mock.Anything).Return(nil, false, nil) // cache miss
+		mCacher.On("Get", mock.Anything, mock.Anything).Return(nil, false, nil) // cache miss
 		// note that despite cache miss, no call must be made for cache.Set
 		// as max rows has been exceeded
 	}
@@ -398,8 +398,8 @@ func TestCacheSetErr(t *testing.T) {
 
 	mCacher := new(mocks.Cacher)
 	for i := 0; i < 2; i++ { // once each for runQuery and runQueryPrepared
-		mCacher.On("Get", mock.Anything).Return(nil, false, nil) // cache miss
-		mCacher.On("Set", mock.Anything, mock.Anything, time.Duration(30*time.Second)).Return(errors.New("some error"))
+		mCacher.On("Get", mock.Anything, mock.Anything).Return(nil, false, nil) // cache miss
+		mCacher.On("Set", mock.Anything, mock.Anything, mock.Anything, time.Duration(30*time.Second)).Return(errors.New("some error"))
 	}
 
 	onErrCalled := false

@@ -1,6 +1,7 @@
 package sqlcache
 
 import (
+	"context"
 	"fmt"
 	"time"
 
@@ -17,7 +18,7 @@ type Ristretto struct {
 
 // Get gets a cache item from ristretto. Returns pointer to the item, a boolean
 // which represents whether key exists or not and an error.
-func (r *Ristretto) Get(key string) (*cache.Item, bool, error) {
+func (r *Ristretto) Get(ctx context.Context, key string) (*cache.Item, bool, error) {
 	i, ok := r.c.Get(key)
 	if !ok {
 		return nil, false, nil
@@ -32,7 +33,7 @@ func (r *Ristretto) Get(key string) (*cache.Item, bool, error) {
 }
 
 // Set sets the given item into ristretto with provided TTL duration.
-func (r *Ristretto) Set(key string, item *cache.Item, ttl time.Duration) error {
+func (r *Ristretto) Set(ctx context.Context, key string, item *cache.Item, ttl time.Duration) error {
 	// using # of rows as cost
 	_ = r.c.SetWithTTL(key, item, int64(len(item.Rows)), ttl)
 	return nil

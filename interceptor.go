@@ -84,15 +84,17 @@ func (i *Interceptor) Disable() {
 }
 
 // StmtQueryContext intecepts database/sql's stmt.QueryContext calls from a prepared statement.
-func (i *Interceptor) StmtQueryContext(ctx context.Context, conn driver.StmtQueryContext, query string, args []driver.NamedValue) (driver.Rows, error) {
+func (i *Interceptor) StmtQueryContext(ctx context.Context, conn driver.StmtQueryContext, query string, args []driver.NamedValue) (context.Context, driver.Rows, error) {
 
 	if i.disabled {
-		return conn.QueryContext(ctx, args)
+		rows, err := conn.QueryContext(ctx, args)
+		return ctx, rows, err
 	}
 
 	attrs := getAttrs(query)
 	if attrs == nil {
-		return conn.QueryContext(ctx, args)
+		rows, err := conn.QueryContext(ctx, args)
+		return ctx, rows, err
 	}
 
 	hash, err := i.hashFunc(query, args)
@@ -101,20 +103,21 @@ func (i *Interceptor) StmtQueryContext(ctx context.Context, conn driver.StmtQuer
 		if i.onErr != nil {
 			i.onErr(fmt.Errorf("HashFunc failed: %w", err))
 		}
-		return conn.QueryContext(ctx, args)
+		rows, err := conn.QueryContext(ctx, args)
+		return ctx, rows, err
 	}
 
-	if cached := i.checkCache(hash); cached != nil {
-		return cached, nil
+	if cached := i.checkCache(ctx, hash); cached != nil {
+		return ctx, cached, nil
 	}
 
 	rows, err := conn.QueryContext(ctx, args)
 	if err != nil {
-		return rows, err
+		return ctx, rows, err
 	}
 
 	cacheSetter := func(item *cache.Item) {
-		err := i.c.Set(hash, item, time.Duration(attrs.ttl)*time.Second)
+		err := i.c.Set(ctx, hash, item, time.Duration(attrs.ttl)*time.Second)
 		if err != nil {
 			atomic.AddUint64(&i.stats.Errors, 1)
 			if i.onErr != nil {
@@ -123,19 +126,22 @@ func (i *Interceptor) StmtQueryContext(ctx context.Context, conn driver.StmtQuer
 		}
 	}
 
-	return newRowsRecorder(cacheSetter, rows, attrs.maxRows), err
+	rows = newRowsRecorder(cacheSetter, rows, attrs.maxRows)
+	return ctx, rows, err
 }
 
 // ConnQueryContext intecepts database/sql's DB.QueryContext Conn.QueryContext calls.
-func (i *Interceptor) ConnQueryContext(ctx context.Context, conn driver.QueryerContext, query string, args []driver.NamedValue) (driver.Rows, error) {
+func (i *Interceptor) ConnQueryContext(ctx context.Context, conn driver.QueryerContext, query string, args []driver.NamedValue) (context.Context, driver.Rows, error) {
 
 	if i.disabled {
-		return conn.QueryContext(ctx, query, args)
+		rows, err := conn.QueryContext(ctx, query, args)
+		return ctx, rows, err
 	}
 
 	attrs := getAttrs(query)
 	if attrs == nil {
-		return conn.QueryContext(ctx, query, args)
+		rows, err := conn.QueryContext(ctx, query, args)
+		return ctx, rows, err
 	}
 
 	hash, err := i.hashFunc(query, args)
@@ -144,20 +150,21 @@ func (i *Interceptor) ConnQueryContext(ctx context.Context, conn driver.QueryerC
 		if i.onErr != nil {
 			i.onErr(fmt.Errorf("HashFunc failed: %w", err))
 		}
-		return conn.QueryContext(ctx, query, args)
+		rows, err := conn.QueryContext(ctx, query, args)
+		return ctx, rows, err
 	}
 
-	if cached := i.checkCache(hash); cached != nil {
-		return cached, nil
+	if cached := i.checkCache(ctx, hash); cached != nil {
+		return ctx, cached, nil
 	}
 
 	rows, err := conn.QueryContext(ctx, query, args)
 	if err != nil {
-		return rows, err
+		return ctx, rows, err
 	}
 
 	cacheSetter := func(item *cache.Item) {
-		err := i.c.Set(hash, item, time.Duration(attrs.ttl)*time.Second)
+		err := i.c.Set(ctx, hash, item, time.Duration(attrs.ttl)*time.Second)
 		if err != nil {
 			atomic.AddUint64(&i.stats.Errors, 1)
 			if i.onErr != nil {
@@ -166,11 +173,12 @@ func (i *Interceptor) ConnQueryContext(ctx context.Context, conn driver.QueryerC
 		}
 	}
 
-	return newRowsRecorder(cacheSetter, rows, attrs.maxRows), err
+	rows = newRowsRecorder(cacheSetter, rows, attrs.maxRows)
+	return ctx, rows, err
 }
 
-func (i *Interceptor) checkCache(hash string) driver.Rows {
-	item, ok, err := i.c.Get(hash)
+func (i *Interceptor) checkCache(ctx context.Context, hash string) driver.Rows {
+	item, ok, err := i.c.Get(ctx, hash)
 	if err != nil {
 		atomic.AddUint64(&i.stats.Errors, 1)
 		if i.onErr != nil {

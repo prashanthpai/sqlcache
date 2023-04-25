@@ -1,6 +1,7 @@
 package cache
 
 import (
+	"context"
 	"database/sql/driver"
 	"time"
 )
@@ -17,7 +18,7 @@ type Cacher interface {
 	// Get must return a pointer to the item, a boolean representing whether
 	// item is present or not, and an error (must be nil when key is not
 	// present).
-	Get(key string) (*Item, bool, error)
+	Get(ctx context.Context, key string) (*Item, bool, error)
 	// Set sets the item into cache with the given TTL.
-	Set(key string, item *Item, ttl time.Duration) error
+	Set(ctx context.Context, key string, item *Item, ttl time.Duration) error
 }
