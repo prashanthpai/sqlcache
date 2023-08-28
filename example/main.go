@@ -11,8 +11,8 @@ import (
 	"github.com/prashanthpai/sqlcache/cache"
 
 	"github.com/dgraph-io/ristretto"
-	redis "github.com/go-redis/redis/v8"
 	"github.com/jackc/pgx/v4/stdlib"
+	//	"github.com/go-redis/redis/v8"
 )
 
 const (
@@ -32,17 +32,19 @@ func newRistrettoCache(maxRowsToCache int64) (cache.Cacher, error) {
 	return sqlcache.NewRistretto(c), nil
 }
 
+/*
 func newRedisCache() (cache.Cacher, error) {
 	r := redis.NewUniversalClient(&redis.UniversalOptions{
 		Addrs: []string{"127.0.0.1:6379"},
 	})
 
-	if _, err := r.Ping(context.TODO()).Result(); err != nil {
+	if _, err := r.Ping(context.Background()).Result(); err != nil {
 		return nil, err
 	}
 
 	return sqlcache.NewRedis(r, "sqc:"), nil
 }
+*/
 
 func main() {
 

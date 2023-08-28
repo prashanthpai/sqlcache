@@ -7,7 +7,7 @@ import (
 	"strings"
 	"unicode"
 
-	"github.com/mitchellh/hashstructure"
+	"github.com/mitchellh/hashstructure/v2"
 )
 
 func defaultHashFunc(query string, args []driver.NamedValue) (string, error) {
@@ -17,7 +17,7 @@ func defaultHashFunc(query string, args []driver.NamedValue) (string, error) {
 	}{
 		Query: query,
 		Args:  args,
-	}, nil)
+	}, hashstructure.FormatV2, nil)
 	if err != nil {
 		return "", err
 	}
