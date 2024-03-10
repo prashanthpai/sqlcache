@@ -4,10 +4,10 @@ import (
 	"context"
 	"time"
 
-	"github.com/prashanthpai/sqlcache/cache"
-
-	"github.com/go-redis/redis/v8"
+	"github.com/redis/go-redis/v9"
 	"github.com/vmihailenco/msgpack/v4"
+
+	"github.com/prashanthpai/sqlcache/cache"
 )
 
 // Redis implements cache.Cacher interface to use redis as backend with
