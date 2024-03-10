@@ -21,7 +21,7 @@ as the underlying driver.
 Cache backends supported:
 
 * [ristretto](https://github.com/dgraph-io/ristretto) (in-memory)
-* [redis](https://github.com/go-redis/redis)
+* [redis](https://github.com/redis/go-redis)
 
 It's easy to add other caching backends by implementing the `cache.Cacher`
 interface.
@@ -34,7 +34,7 @@ Create a backend cache instance and install the interceptor:
 import (
 	"database/sql"
 
-	"github.com/go-redis/redis/v8"
+	"github.com/redis/go-redis/v9"
 	"github.com/jackc/pgx/v4/stdlib"
 	"github.com/prashanthpai/sqlcache"
 )

@@ -12,7 +12,7 @@ import (
 
 	"github.com/dgraph-io/ristretto"
 	"github.com/jackc/pgx/v4/stdlib"
-	//	"github.com/go-redis/redis/v8"
+	//	"github.com/redis/go-redis/v9"
 )
 
 const (
