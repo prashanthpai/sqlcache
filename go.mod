@@ -32,7 +32,7 @@ require (
 	github.com/stretchr/objx v0.5.0 // indirect
 	github.com/vmihailenco/tagparser v0.1.1 // indirect
 	golang.org/x/crypto v0.17.0 // indirect
-	golang.org/x/net v0.10.0 // indirect
+	golang.org/x/net v0.17.0 // indirect
 	golang.org/x/sys v0.15.0 // indirect
 	golang.org/x/text v0.14.0 // indirect
 	google.golang.org/appengine v1.6.5 // indirect
