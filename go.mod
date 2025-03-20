@@ -8,7 +8,7 @@ require (
 	github.com/jackc/pgx/v4 v4.18.3
 	github.com/mitchellh/hashstructure/v2 v2.0.2
 	github.com/ngrok/sqlmw v0.0.0-20220520173518-97c9c04efc79
-	github.com/redis/go-redis/v9 v9.7.0
+	github.com/redis/go-redis/v9 v9.7.3
 	github.com/stretchr/testify v1.10.0
 	github.com/vmihailenco/msgpack/v4 v4.3.13
 )
