@@ -1,6 +1,8 @@
 module github.com/prashanthpai/sqlcache
 
-go 1.19
+go 1.23.0
+
+toolchain go1.24.1
 
 require (
 	github.com/DATA-DOG/go-sqlmock v1.5.2
@@ -32,7 +34,7 @@ require (
 	github.com/stretchr/objx v0.5.2 // indirect
 	github.com/vmihailenco/tagparser v0.1.1 // indirect
 	golang.org/x/crypto v0.35.0 // indirect
-	golang.org/x/net v0.33.0 // indirect
+	golang.org/x/net v0.36.0 // indirect
 	golang.org/x/sys v0.30.0 // indirect
 	golang.org/x/text v0.22.0 // indirect
 	google.golang.org/appengine v1.6.5 // indirect
